@@ -47,8 +47,8 @@ def calculate_axial_force(node1,node2,u_global,elements) : #Không cần nhập 
     stress = E_local * strain
     return axial_force,stress
 
-def solve_truss(node_list,free_nodes,connections,load) : 
-    element_list = {}
+def solve_truss(node_list,free_nodes,connections_list,load) : 
+    element_dictionary = {}
     N = len(node_list)
     K_global= np.zeros((2*N,2*N))
     free_dofs = []
@@ -58,8 +58,8 @@ def solve_truss(node_list,free_nodes,connections,load) :
         free_dofs.extend([2*i,2*i+1])
     free_dofs = np.array(free_dofs)
 
-    for tuples in connections : 
-        connect(node_list,tuples[0],tuples[1],tuples[2],tuples[3],element_list,K_global) #(node1,node2,A1,E1,into element list, K_global) ###
+    for tuples in connections_list : 
+        connect(node_list,tuples[0],tuples[1],tuples[2],tuples[3],element_dictionary,K_global) #(node1,node2,A1,E1,into element list, K_global) ###
 
     K_reduced, F_reduced = reduce(K_global,load,free_dofs) #Nếu không theo thứ tự -> vector, matrix slicing nó bị mess up
     u_reduced = np.linalg.solve(K_reduced, F_reduced)
@@ -68,14 +68,13 @@ def solve_truss(node_list,free_nodes,connections,load) :
 
     axial_force = []
     stress = []
-    UTS = []
-    for connection in connections : #Theo thứ tự, note cho visualization khoẻ.
-        f,s = calculate_axial_force(connection[0],connection[1],u,element_list)
+    for connection in connections_list : #Theo thứ tự, note cho visualization khoẻ.
+        f,s = calculate_axial_force(connection[0],connection[1],u,element_dictionary)
         stress.append(s)
         axial_force.append(f)
-        UTS.append(connection[4])
+        #UTS.append(connection[4])
         #print(f'Axial force node {connection[0]} and {connection[1]} = {f}')
-    return u,reaction,axial_force,stress, UTS
+    return u,reaction,axial_force,stress 
 #elements = [(i,j,c,s,L,A,E)]
 
 #Thứ tự force trong axial list tương ứng với thứ tự trong connections
