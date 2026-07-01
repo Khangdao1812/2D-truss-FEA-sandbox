@@ -289,7 +289,7 @@ class Structure :
     stress_full_force_snap_shot : list = field(default_factory=list)
 
     viewing_mode : int = None
-    playback_speed: float = 0.1
+    playback_speed: float = 0.2
     timer: float = 0
     display_grid : bool = False
     elapsed_time: float = 0.0
@@ -486,14 +486,6 @@ def handle_events(state,structure,editor,camera_object) :
 
 
 
-        if not structure.collapsed and state == 'simulate': 
-            structure.position_dictionary_real = node_position_list(structure.screenx, structure.screeny, structure.scale, 
-                                                        structure.real_displaced_position,camera_object)
-            
-        else : 
-            structure.position_dictionary_real = node_position_list(structure.screenx, structure.screeny, structure.scale, 
-                                                        structure.prev_real_displaced_position,camera_object)
-
         if state == 'editor' : 
             editor.position_dictionary_editor = node_position_list(structure.screenx, structure.screeny, 
                                                                    structure.scale, editor.node_list,camera_object)
@@ -521,6 +513,14 @@ def handle_events(state,structure,editor,camera_object) :
                 else:
                     structure.show_popup = False
                     structure.selected_bar = None
+
+    if not structure.collapsed and state == 'simulate': 
+        structure.position_dictionary_real = node_position_list(structure.screenx, structure.screeny, structure.scale, 
+                                                    structure.real_displaced_position,camera_object)
+            
+    else : 
+        structure.position_dictionary_real = node_position_list(structure.screenx, structure.screeny, structure.scale, 
+                                                    structure.prev_real_displaced_position,camera_object)
     return state
 
 
