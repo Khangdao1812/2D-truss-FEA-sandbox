@@ -73,9 +73,9 @@ Node -> Element -> Global stiffness matrix -> Boundary conditions -> Solve -> Po
 
 The interface is organized for a simple workflow : build -> simulate -> post-mortem inspection
 
-Editing tools are available before the simulation begins, allowing users to create nodes and members, assign fixed supports, apply loads, and modify structural properties. Once a simulation starts, the model is locked to ensure a consistent finite element analysis.
+Editing tools are available before the simulation begins, allowing users to create nodes and members, assign fixed supports, apply loads, and modify each member's properties.
 
-Simulation results can be explored through the property inspector, stress visualization, and deformation display. During progressive failure analysis, failed members remain visible in a freeze-frame state, allowing users to inspect each collapse event before advancing to the next simulation step.
+Simulation results can be explored through the property inspector, stress visualization, and deformation display. During progressive failure analysis, failed members remain visible in a freeze-frame state, allowing users to inspect each collapse event before advancing to the next step.
 
 For a detailed explanation of the interface design and interaction principles, see docs/ui_logic_user_manual.md .
 
