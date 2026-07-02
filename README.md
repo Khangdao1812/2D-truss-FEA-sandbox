@@ -23,7 +23,7 @@ Progressive failure frame-freeze : Every time the user hits the enter button, th
   Around a year ago, I borrowed an old book of my grandparents about classical mechanics in engineering (they're both civil engineers) and was particularly intrigued with the content and the exercise. Prior to this, I've also explored some engineering softwares like CAD and SolidWorks out of curiosity. However, the experience was not so smooth since their interface is not so straightforward to a my 14-year-old self (I also don't see the reason why they should optimize it for a 14-year-old!).
    One day, these two thoughts, combined with my pursuit in linear algebra at the time, came toghether unexpectedly after wandering around the corners of my mind. This is the reason why I set out to program THIS engineering sandbox on my own, with the aim to both learn & make structural analysis more accessible to young engineering enthusiasts
 
-→ Read more: docs/Reflection.md
+→ Read more: [docs/Reflection.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/reflection.md)
 
 ----------------------------------------
 
@@ -51,21 +51,9 @@ Progressive failure frame-freeze : Every time the user hits the enter button, th
 
 # Core pipeline : 
 
-Node
-↓
-Element
-↓
-Global stiffness matrix
-↓
-Boundary conditions
-↓
-Solve
-↓
-Post-processing
-↓
-Visualization
+Node -> Element -> Global stiffness matrix -> Boundary conditions -> Solve -> Post-processing -> Visualization
 
-→ Read more: docs/architecture.md
+→ Read more: [docs/architecture.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/architecture.md)
 
 ----------------------------------------
 
@@ -74,7 +62,7 @@ Visualization
 - Involves stiffness matrix assembly in Finite Element Analysis
 - Linear algebra involved (+vector geometry in interface processing)
 
-→ Read more: docs/fem_solver.md
+→ Read more: [docs/fem_solver.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/fem_solver.md)
 
 ----------------------------------------
 
@@ -91,7 +79,7 @@ Simulation results can be explored through the property inspector, stress visual
 
 For a detailed explanation of the interface design and interaction principles, see docs/ui_logic_user_manual.md .
 
-→ Read more: docs/ui_logic_user_manual.md
+→ Read more: [docs/ui_logic_user_manual.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/ui_logic_user_manual.md)
 
 ----------------------------------------
 
@@ -126,14 +114,14 @@ For a detailed explanation of the interface design and interaction principles, s
 
 ----------------------------------------
 
-## Documentation
+## Further documentations
 
-• Architecture
-• Engineering_decisions
-• UI_logic_user_manual
-• Rendering
-• Reflection
-- Core solver
+- [Architecture](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/architecture.md)
+- [Engineering_decisions](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/engineering_decisions.md)
+- [UI_logic_user_manual](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/ui_logic_user_manual.md)
+- [Rendering](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/rendering.md)
+- [Reflection](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/reflection.md)
+- [Core solver](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/fem_solver.md)
 
 ----------------------------------------
 
@@ -143,3 +131,4 @@ For a detailed explanation of the interface design and interaction principles, s
   + https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
   + w3schools.com for providing helpful information on python syntax
   + This pdf textbook on the fundamentals of FEA : http://freeit.free.fr/Finite%20Element/Hutton%20-%20Fundamentals%20of%20FEA,%202004/Chapter%202.PDF
+  + OpenAI's ChatGPT and Google Gemini for responding to my inquiries about eigenvalues, eigen vectors, ranks, etc.
