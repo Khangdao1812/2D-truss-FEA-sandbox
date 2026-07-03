@@ -1,4 +1,10 @@
 ## THE CORE SOLVER
+
+A quick look at the master function of the solver : 
+
+<img width="908" height="665" alt="image" src="https://github.com/user-attachments/assets/0e677145-3553-4d47-97b4-9ba40bc97977" />
+
+
 Before we begin, there are a few assumptions in this project that should be addressed first.
 
 # Assumptions & limitations : 
