@@ -62,7 +62,7 @@ Node -> Element -> Global stiffness matrix -> Boundary conditions -> Solve -> Po
 - Involves stiffness matrix assembly in Finite Element Analysis
 - Linear algebra involved (+vector geometry in interface processing)
 
-→ Read more: [docs/fem_solver.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/fem_solver.md)
+→ Read more: [docs/core_FEA_theory.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/core_FEA_theory.md)
 
 ----------------------------------------
 
@@ -121,7 +121,7 @@ For a detailed explanation of the interface design and interaction principles, s
 - [UI_logic_user_manual](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/ui_logic_user_manual.md)
 - [Rendering](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/rendering.md)
 - [Reflection](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/reflection.md)
-- [Core solver](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/fem_solver.md)
+- [Core solver]([core_FEA_theory.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/core_FEA_theory.md))
 
 ----------------------------------------
 
