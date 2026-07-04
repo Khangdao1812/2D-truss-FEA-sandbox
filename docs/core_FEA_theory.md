@@ -49,8 +49,8 @@ The vector $\begin{bmatrix} c \\ s \end{bmatrix}$ is the unit vector in the dire
 
 Now let the nodal displacements be:
 
-Node $i$ : $\begin{bmatrix} u_i \\ v_i \end{bmatrix}$  
-Node $j$ : $\begin{bmatrix} u_j \\ v_j \end{bmatrix}$
+Node $i$: $(u_i, v_i)$
+Node $j$: $(u_j, v_j)$
 
 Instead of thinking in x and y separately, we project the **relative displacement** onto the element's axis using the dot product.
 
