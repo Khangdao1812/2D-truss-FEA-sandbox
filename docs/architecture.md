@@ -1,7 +1,12 @@
 $$
+u=
 \begin{bmatrix}
-1\\
-2\\
-3
+u_1\\
+v_1\\
+u_2\\
+v_2\\
+\vdots\\
+u_n\\
+v_n
 \end{bmatrix}
 $$
