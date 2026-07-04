@@ -202,16 +202,16 @@ Each element only connects two nodes, but a structure has many elements.
 We define a global displacement vector $u$:
 
 $$
-\mathbf{u} =
-\begin{pmatrix}
-u_1 \\
-v_1 \\
-u_2 \\
-v_2 \\
-\vdots \\
-u_n \\
+u=
+\begin{bmatrix}
+u_1\\
+v_1\\
+u_2\\
+v_2\\
+\vdots\\
+u_n\\
 v_n
-\end{pmatrix}
+\end{bmatrix}
 $$
 
 Each element contributes its $k_e$ into a global stiffness matrix $K$.
