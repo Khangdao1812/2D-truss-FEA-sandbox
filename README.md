@@ -8,7 +8,7 @@ A 2D Truss FEA Sandbox
 
 This project is an interactive 2D truss finite element analysis (FEA) sandbox that allows users to build and experiment with custom truss structures. Users can create nodes and members, define support conditions, and apply external nodal loads to investigate structural behavior.
 
-The solver computes nodal displacements, internal member forces, and stresses using the global stiffness matrix method. Results are visualized through color-coded stress maps, and interactive inspection tools, with a particular emphasis on the intuitive aspect of structural engineering. The project also supports progressive structural failure simulation, enabling users to observe how their structure would collapse in reality to a certain degree of accuracy, though exact behaviour is not guaranteened due to initial assumptions discussed near the end. 
+The solver computes nodal displacements, internal member forces, and stresses using the global stiffness matrix method. Results are visualized through color-coded stress maps, and interactive inspection tools, emphasizing on the intuitive learning. The project also supports progressive structural failure simulation, enabling users to observe how the structure would likely collapse in reality under load.
 
 <img width="970" height="721" alt="Project_graph" src="https://github.com/user-attachments/assets/90def593-7294-4425-9fd5-d16d25492947" />
 
@@ -21,7 +21,7 @@ Progressive failure frame-freeze : Every time the user hits the enter button, th
 ## Motivation
 
   Around a year ago, I borrowed an old book of my grandparents about classical mechanics in engineering (they're both civil engineers) and was particularly intrigued with the content and the exercise. Prior to this, I've also explored some engineering softwares like CAD and SolidWorks out of curiosity. However, the experience was not so smooth since their interface is not so straightforward to a my 14-year-old self (I also don't see the reason why they should optimize it for a 14-year-old!).
-   One day, these two thoughts, combined with my pursuit in linear algebra at the time, came toghether unexpectedly after wandering around the corners of my mind. This is the reason why I set out to program THIS engineering sandbox on my own, with the aim to both learn & make structural analysis more accessible to young engineering enthusiasts
+   One day, these two thoughts, combined with my pursuit in linear algebra at the time, came toghether unexpectedly after wandering for a long time at the corners of my mind. This is the reason why I set out to program THIS engineering sandbox on my own, with the aim to both learn & make structural analysis more accessible to young engineering enthusiasts
 
 → Read more: [docs/Reflection.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/reflection.md)
 
