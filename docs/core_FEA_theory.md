@@ -210,6 +210,7 @@ This step is insightful, allowing computational power to come into play. "Magic!
 
 So the scary matrix form is rather a more sophisticated way to encode such a mess of variables and equations.
 
+**IMPORTANT NOTE** : You might have seen the Load graph in the inspection mode (shown in the [README](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/README.md) ) and asked why does it have the shape of a line. Now you know it! This project is all based on assuming **linear** elastic behaviour, meaning that force is proportional to deformation (Hooke's law mentioned above). The load itself is also applied linearly over time as a simulation choice, which keeps the response within the assumptions of the solver.
 
 ## Step 5: Generalized case
 
