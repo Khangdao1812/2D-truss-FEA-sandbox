@@ -38,19 +38,19 @@ Let node $i$ have coordinates $(x_i, y_i)$ and node $j$ have coordinates $(x_j, 
 
 The original element has a direction vector:
 
-$$d = (x_j - x_i, y_j - y_i)$$
+$$d = \begin{bmatrix} x_j - x_i \\ y_j - y_i \end{bmatrix}$$
 
 Let its length be $L$, and define direction cosines:
 
 $$c = \frac{x_j - x_i}{L}$$  
 $$s = \frac{y_j - y_i}{L}$$  
 
-The vector $(c, s)$ is the unit vector in the direction of the bar.
+The vector $\begin{bmatrix} c \\ s \end{bmatrix}$ is the unit vector in the direction of the bar.
 
 Now let the nodal displacements be:
 
-Node $i$ : $(u_i, v_i)$  
-Node $j$ : $(u_j, v_j)$
+Node $i$ : $\begin{bmatrix} u_i \\ v_i \end{bmatrix}$  
+Node $j$ : $\begin{bmatrix} u_j \\ v_j \end{bmatrix}$
 
 Instead of thinking in x and y separately, we project the **relative displacement** onto the element's axis using the dot product.
 
