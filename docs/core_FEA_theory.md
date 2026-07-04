@@ -164,21 +164,26 @@ $$F_{iy} = \frac{EA}{L} [(cs)u_i + (s^2)v_i + (-cs)u_j + (-s^2)v_j]$$
 
 Looking at each individual equation, can you recognize the matrix-vector multiplication?
 
-On the left, group the forces:
+On the left, group the forces into an element force vector $F_e$:
 
-$[F_{ix}, F_{iy}, F_{jx}, F_{jy}]$, denote it as $F_e$
+$$F_e = \begin{bmatrix} F_{ix} \\ F_{iy} \\ F_{jx} \\ F_{jy} \end{bmatrix}$$
 
-On the right, group the displacements:
+On the right, group the displacements into an element displacement vector $u_e$:
 
-$[u_i, v_i, u_j, v_j]$, denote it as $u_e$
+$$u_e = \begin{bmatrix} u_i \\ v_i \\ u_j \\ v_j \end{bmatrix}$$
 
 See it? We rewrite the entire system compactly:
 
 $$F_e = k_e u_e$$
 
-Where $k_e$ is:
+Where $k_e$ is the $4 \times 4$ element stiffness matrix:
 
-$$k_e = \frac{EA}{L} \begin{bmatrix} c^2 & cs & -c^2 & -cs \\ cs & s^2 & -cs & -s^2 \\ -c^2 & -cs & c^2 & cs \\ -cs & -s^2 & cs & s^2 \end{bmatrix}$$
+$$k_e = \frac{EA}{L} \begin{bmatrix}
+c^2 & cs & -c^2 & -cs \\
+cs & s^2 & -cs & -s^2 \\
+-c^2 & -cs & c^2 & cs \\
+-cs & -s^2 & cs & s^2
+\end{bmatrix}$$
 
 Does this look more familiar now? 
 
@@ -196,7 +201,7 @@ Each element only connects two nodes, but a structure has many elements.
 
 We define a global displacement vector $u$:
 
-$$u = [u_1, v_1, u_2, v_2, \dots, u_n, v_n]$$
+$$u = \begin{bmatrix} u_1 \\ v_1 \\ u_2 \\ v_2 \\ \vdots \\ u_n \\ v_n \end{bmatrix}$$
 
 Each element contributes its $k_e$ into a global stiffness matrix $K$.
 
