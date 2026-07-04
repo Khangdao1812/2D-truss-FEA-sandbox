@@ -19,44 +19,44 @@ Before we begin, there are a few assumptions in this project that should be addr
    At the very beginning, everything comes from a simple physical idea: if you pull on a bar, it stretches. If you push on it, it compresses. Remember the good old Hooke's law? 
 Hooke’s law says that force is proportional to deformation. For a 1D bar:
 
-F = k * ΔL
+$$F = k \Delta L$$
 
-where ΔL is the change in length, and k is the stiffness of the bar. For a uniform bar, stiffness is:
+where $\Delta L$ is the change in length, and $k$ is the stiffness of the bar. For a uniform bar, stiffness is:
 
-k = EA / L
+$$k = \frac{EA}{L}$$
 
 So we can write:
 
-F = (EA / L) * ΔL
+$$F = \left(\frac{EA}{L}\right) \Delta L$$
 
 
-## Step 1: What is ΔL in a truss?
+## Step 1: What is $\Delta L$ in a truss?
 
-In a truss, elements are not aligned with the x or y axis. Each element is oriented in 2D space. So, how do we compute the change in length ΔL from node displacements?
+In a truss, elements are not aligned with the x or y axis. Each element is oriented in 2D space. So, how do we compute the change in length $\Delta L$ from node displacements?
 
-Let node i have coordinates (x_i, y_i) and node j have coordinates (x_j, y_j).
+Let node $i$ have coordinates $(x_i, y_i)$ and node $j$ have coordinates $(x_j, y_j)$.
 
 The original element has a direction vector:
 
-d = (x_j - x_i, y_j - y_i)
+$$d = (x_j - x_i, y_j - y_i)$$
 
-Let its length be L, and define direction cosines:
+Let its length be $L$, and define direction cosines:
 
-c = (x_j - x_i) / L  
-s = (y_j - y_i) / L  
+$$c = \frac{x_j - x_i}{L}$$  
+$$s = \frac{y_j - y_i}{L}$$  
 
-The vector (c, s) is the unit vector in the direction of the bar.
+The vector $(c, s)$ is the unit vector in the direction of the bar.
 
 Now let the nodal displacements be:
 
-Node i : (u_i, v_i)  
-Node j : (u_j, v_j)
+Node $i$ : $(u_i, v_i)$  
+Node $j$ : $(u_j, v_j)$
 
 Instead of thinking in x and y separately, we project the **relative displacement** onto the element's axis using the dot product.
 
-The extension ΔL is:
+The extension $\Delta L$ is:
 
-ΔL = (u_j - u_i)c + (v_j - v_i)s
+$$\Delta L = (u_j - u_i)c + (v_j - v_i)s$$
 
 Still simple.... Right?
 
@@ -67,52 +67,52 @@ This is the first important step: it converts 2D motion into a 1D stretch along 
 
 We have the following fundamental equations:
 
-- Axial strain : ε = ΔL / L (no unit)
-- Hooke's Law : σ = Eε (E is Young's modulus, σ is stress)
-- F = σA (A is the cross-sectional area)
+- Axial strain : $\varepsilon = \frac{\Delta L}{L}$ (no unit)
+- Hooke's Law : $\sigma = E\varepsilon$ ($E$ is Young's modulus, $\sigma$ is stress)
+- $F = \sigma A$ ($A$ is the cross-sectional area)
 
 With a bit of algebraic manipulation, we have:
 
-F = σA = EεA = EA*ΔL / L
+$$F = \sigma A = E\varepsilon A = \frac{EA \Delta L}{L}$$
 
-Now plug ΔL into Hooke's law:
+Now plug $\Delta L$ into Hooke's law:
 
-F = (EA / L) * [(u_j - u_i)c + (v_j - v_i)s]
+$$F = \frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s]$$
 
-This F is the internal axial force in the element.
+This $F$ is the internal axial force in the element.
 
 
 ## Step 3: Distribute forces to nodes
 
 The element pulls equally and oppositely on its two nodes.
 
-At node i, the force is in the negative direction of the element.
+At node $i$, the force is in the negative direction of the element.
 
-At node j, the force is in the positive direction.
+At node $j$, the force is in the positive direction.
 
-We project F back into the x and y axis:
+We project $F$ back into the x and y axis:
 
-At node i:
+At node $i$:
 
-F_ix = -F * c
+$$F_{ix} = -F \cdot c$$
 
-F_iy = -F * s
+$$F_{iy} = -F \cdot s$$
 
-At node j:
+At node $j$:
 
-F_jx = F * c
+$$F_{jx} = F \cdot c$$
 
-F_jy = F * s
+$$F_{jy} = F \cdot s$$
 
-Now substitute F:
+Now substitute $F$:
 
-F_ix = -(EA / L) * [(u_j - u_i)c + (v_j - v_i)s] * c
+$$F_{ix} = -\frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s] c$$
 
-F_iy = -(EA / L) * [(u_j - u_i)c + (v_j - v_i)s] * s
+$$F_{iy} = -\frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s] s$$
 
-F_jx = (EA / L) * [(u_j - u_i)c + (v_j - v_i)s] * c
+$$F_{jx} = \frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s] c$$
 
-F_jy = (EA / L) * [(u_j - u_i)c + (v_j - v_i)s] * s
+$$F_{jy} = \frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s] s$$
 
 ## Step 4: Rewriting in matrix form
 
@@ -120,72 +120,65 @@ Now comes the key transition to a different expression which allows us to utiliz
 
 Start from the expression of the axial force:
 
-F = (EA / L) * [(u_j - u_i)c + (v_j - v_i)s]
+$$F = \frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s]$$
 
-Now look at the force components at node i:
+Now look at the force components at node $i$:
 
-F_ix = -F * c
+$$F_{ix} = -F \cdot c$$
 
-F_iy = -F * s
+$$F_{iy} = -F \cdot s$$
 
-Substitute F into F_ix:
+Substitute $F$ into $F_{ix}$:
 
-F_ix = -(EA / L) * [(u_j - u_i)c + (v_j - v_i)s] * c
+$$F_{ix} = -\frac{EA}{L} [(u_j - u_i)c + (v_j - v_i)s] c$$
 
-Now distribute c into the bracket:
+Now distribute $c$ into the bracket:
 
-F_ix = -(EA / L) * [(u_j - u_i)c² + (v_j - v_i)cs]
+$$F_{ix} = -\frac{EA}{L} [(u_j - u_i)c^2 + (v_j - v_i)cs]$$
 
 Now expand the differences:
 
-F_ix = -(EA / L) * [u_jc² - u_ic² + v_jcs - v_ics]
+$$F_{ix} = -\frac{EA}{L} [u_jc^2 - u_ic^2 + v_jcs - v_ics]$$
 
 Rearrange by grouping terms for each node:
 
-F_ix = (EA / L) * [u_ic² + v_ics - u_jc² - v_jcs]
+$$F_{ix} = \frac{EA}{L} [u_ic^2 + v_ics - u_jc^2 - v_jcs]$$
 
-Do the same for F_iy, we get:
+Do the same for $F_{iy}$, we get:
 
-F_iy = (EA / L) * [u_ics + v_is² - u_jcs - v_js²]
+$$F_{iy} = \frac{EA}{L} [u_ics + v_is^2 - u_jcs - v_js^2]$$
 
-Do the same for node j.
+Do the same for node $j$.
 
 OBSERVE THAT:
 
 Each force component is a linear combination of the four displacement variables:
 
-u_i, v_i, u_j, v_j
+$u_i$, $v_i$, $u_j$, $v_j$
 
 For example:
 
-F_ix = (EA / L) * [(c²)u_i + (cs)v_i + (-c²)u_j + (-cs)v_j]
+$$F_{ix} = \frac{EA}{L} [(c^2)u_i + (cs)v_i + (-c^2)u_j + (-cs)v_j]$$
 
-F_iy = (EA / L) * [(cs)u_i + (s²)v_i + (-cs)u_j + (-s²)v_j]
+$$F_{iy} = \frac{EA}{L} [(cs)u_i + (s^2)v_i + (-cs)u_j + (-s^2)v_j]$$
 
 Looking at each individual equation, can you recognize the matrix-vector multiplication?
 
 On the left, group the forces:
 
-[F_ix, F_iy, F_jx, F_jy], denote it as F_e
+$[F_{ix}, F_{iy}, F_{jx}, F_{jy}]$, denote it as $F_e$
 
 On the right, group the displacements:
 
-[u_i, v_i, u_j, v_j], denote it as u_e
+$[u_i, v_i, u_j, v_j]$, denote it as $u_e$
 
 See it? We rewrite the entire system compactly:
 
-F_e = k_e u_e
+$$F_e = k_e u_e$$
 
-Where k_e is:
+Where $k_e$ is:
 
-k_e = (EA / L) *
-
-[
- [ c²,  cs, -c², -cs ],
- [ cs,  s², -cs, -s² ],
- [ -c², -cs,  c²,  cs ],
- [ -cs, -s²,  cs,  s² ]
-]
+$$k_e = \frac{EA}{L} \begin{bmatrix} c^2 & cs & -c^2 & -cs \\ cs & s^2 & -cs & -s^2 \\ -c^2 & -cs & c^2 & cs \\ -cs & -s^2 & cs & s^2 \end{bmatrix}$$
 
 Does this look more familiar now? 
 
@@ -201,20 +194,20 @@ So the scary matrix form is rather a more sophisticated way to encode such a mes
 
 Each element only connects two nodes, but a structure has many elements.
 
-We define a global displacement vector u:
+We define a global displacement vector $u$:
 
-u = [u₁, v₁, u₂, v₂, ..., uₙ, vₙ]
+$$u = [u_1, v_1, u_2, v_2, \dots, u_n, v_n]$$
 
-Each element contributes its k_e into a global stiffness matrix K.
+Each element contributes its $k_e$ into a global stiffness matrix $K$.
 
 This process is called assembly:
 
 - map local DOFs → global DOFs
-- add k_e into the correct positions in K
+- add $k_e$ into the correct positions in $K$
 
 After assembling all elements, we get:
 
-Ku = F
+$$Ku = F$$
 
 This is the entire linear system.
 
@@ -234,7 +227,7 @@ What can we compute after solving for nodal displacements?
 
 For each element:
 
-ΔL = (u_j - u_i)c + (v_j - v_i)s
+$$\Delta L = (u_j - u_i)c + (v_j - v_i)s$$
 
 This tells us how much the element stretches or compresses.
 
@@ -242,7 +235,7 @@ This tells us how much the element stretches or compresses.
 
 Using Hooke's law:
 
-F = (EA / L) * ΔL
+$$F = \frac{EA}{L} \Delta L$$
 
 This gives the internal force in each bar.
 
@@ -252,7 +245,7 @@ Positive means tension, negative means compression.
 
 We can compute stress:
 
-σ = F / A
+$$\sigma = \frac{F}{A}$$
 
 This tells us how "intense" the force is inside the material. This determines if the bar will collapse, not merely the axial force.
 
@@ -262,9 +255,8 @@ Even though we remove constrained DOFs when solving, we can recover reaction for
 
 Plug the full displacement vector back into:
 
-F = Ku
+$$F = Ku$$
 
 The entries corresponding to fixed DOFs give the reaction forces.
 
 - NumPy provides convenient operations for yielding reduced matrices and reconstructing the full displacement vector.
-
