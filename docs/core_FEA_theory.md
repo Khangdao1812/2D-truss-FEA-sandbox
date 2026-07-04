@@ -166,11 +166,27 @@ Looking at each individual equation, can you recognize the matrix-vector multipl
 
 On the left, group the forces into an element force vector $F_e$:
 
-$$F_e = \begin{bmatrix} F_{ix} \\ F_{iy} \\ F_{jx} \\ F_{jy} \end{bmatrix}$$
+$$
+F_e=
+\begin{bmatrix}
+F_{ix}\\
+F_{iy}\\
+F_{jx}\\
+F_{jy}
+\end{bmatrix}
+$$
 
 On the right, group the displacements into an element displacement vector $u_e$:
 
-$$u_e = \begin{bmatrix} u_i \\ v_i \\ u_j \\ v_j \end{bmatrix}$$
+$$
+u_e=
+\begin{bmatrix}
+u_i\\
+v_i\\
+u_j\\
+v_j
+\end{bmatrix}
+$$
 
 See it? We rewrite the entire system compactly:
 
