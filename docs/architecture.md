@@ -17,13 +17,14 @@ This document is intended to help readers:
 
 ## 2. System Overview
 
-### High-level architecture
+### Diagram
 
-> [Insert system architecture diagram]
+<img width="442" height="652" alt="Screenshot 2026-07-06 160741" src="https://github.com/user-attachments/assets/c8adf4b7-775e-49c3-a6e5-f3d18d538e3c" />
 
-A brief overview of the major subsystems within this project.
+A general summary of run-time cycle
 
 ### Main subsystems
+A brief overview of the major subsystems within this project.
 
 #### User Interface
 Handles user interaction, editing operations, and simulation controls.
