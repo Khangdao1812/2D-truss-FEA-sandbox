@@ -224,7 +224,7 @@ The difference between structure.structure and structure.now_truss will be expla
 ## 7. Core Functions
   For convinience, I'd like to organize this section by each individual code files.
 
-### 1. main.py 
+### 7.1. main.py 
 
 The application's central controller. It owns the main loop, coordinates communication between subsystems, and manages the transition between editor and simulation modes.
 
@@ -283,7 +283,7 @@ Stores the complete state of the current truss model and application.
 
 
 
-### 2. editor.py
+### 7.2. editor.py
 
   The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and mouse-driven interactions within the editor.
 
@@ -340,7 +340,7 @@ Visual display of an external force applied to a node, storing both its physical
 
 
 
-### 3. solver.py
+### 7.3. solver.py
 
 | Function | Inputs | Returns |
 |:---------|:-------|:--------|
@@ -370,7 +370,7 @@ The solver follows the classical linear finite element workflow shown below.
 
 
 
-### 4. visualization.py
+### 7.4. visualization.py
 
 Handles coordinate transformations and structural visualization.
 
@@ -419,7 +419,7 @@ Handles coordinate transformations and structural visualization.
 
 
 
-### 5. camera.py
+### 7.5. camera.py
 
 Manages the viewport's navigation, including panning, zooming, and camera state.
 
@@ -441,25 +441,12 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 | `update_zoom()` | Adjust the zoom level while keeping the world position under the cursor fixed on the screen. | None |
 
 
------
-## 8. Proram cycle
-
-### Program startup
-
-### Normal frame
-
-### Solving a structure
-
-### Progressive failure
-
-### Inspection workflow
-
 ---
 
 
-## 9. Typical Workflows
+## 8. Typical Workflows
 
-1. Creating a bridge
+1. Creating a truss structure (crane boom, bridge, roof, frame)
 
 2. Applying a load
 
@@ -471,7 +458,7 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 ---
 
-## 10. Extension Points
+## 9. Extension Points
 
 | I want to... (goal) | Primary Modules |
 |:------|:----------------|
@@ -485,7 +472,7 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 ---
 
-## 11. Suggested improvements in code architecture
+## 10. Suggested improvements in code architecture
 
 The current architecture prioritizes feature development over ideal software organization. The following areas are recognised for future refactoring : 
 
@@ -495,4 +482,4 @@ The current architecture prioritizes feature development over ideal software org
 
 - Switching between editor and simulation modes requires manually resetting numerous variables, clearing multiple lists, and copying structural data. A cleaner design would replace or reinitialize the entire `Structure` object in the main program loop, significantly simplifying state management.
 
-- Heavy reliance on state variables like : moving_vector (turns on when in the load editor) , inspection_mode, creating bars (turns on when in the structure editor), etc. There are many variables that are dependent on these states and require manual reset each time the main states turn on or off.
+- Heavy reliance on state variables like : `moving_vector` (turns on when in the load editor) , `inspection_mode` , `creating bars` (turns on when in the structure editor), etc. There are many variables that are dependent on these states and require manual reset each time the main states turn on or off.
