@@ -231,7 +231,7 @@ The application's central controller. It owns the main loop, coordinates communi
 
 ---
 
-#### Core Data Structure
+#### Data type & core functions
 
 #### `Structure` (`@dataclass`)
 
@@ -265,7 +265,7 @@ Stores the complete state of the current truss model and application.
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `point_segment_distance()` | Computes the shortest distance between the cursor and a member. | Distance |
+| `point_segment_distance()` | Computes the shortest distance between the cursor and a bar. | Distance |
 | `pick_bar()` | Determines which member is currently selected. | Selected member or `None` |
 | `handle_events()` | Processes keyboard and mouse input. | Updated application mode |
 
@@ -281,6 +281,159 @@ Stores the complete state of the current truss model and application.
 | `render_simulation()` | Renders the simulation scene. | None |
 | `run_program()` | Initializes the application and executes the main program loop. | None |
 
+
+### editor.py
+
+The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and mouse-driven interactions within the editor.
+
+---
+
+#### Core Data Structures
+
+#### `Editor` (class)
+
+Manages the editor state, including the editing mode,  selections, and interaction states while constructing or modifying the truss.
+
+#### `ForceVector` (class)
+
+Visual display of an external force applied to a node, storing both its physical magnitude and its graphical representation. It is not a real physical object, though its ending point had to be **stored in world coordinates** to ensure consistent display image under panning/zooming.
+
+---
+
+#### Node Selection & Interaction
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `pick_closest_node()` | Finds the node closest to the cursor within the threshold. | Selected node index or `None` |
+| `find_selected_bar()` | Determines which structural member is currently under/close the cursor. | Selected member index or `None` |
+
+---
+
+#### Structure Editing
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `detect_key_edit_structure()` | Processes editor input for creating, modifying, and deleting structural components. | None *(updates the structural model)* |
+| `detect_key_force_editor()` | Handles mouse interactions for creating and modifying external force vectors. | None *(updates editor state)* |
+
+---
+
+#### Force Vector Management
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `interpret_force_array()` | Creates `ForceVector` objects from the current global load vector. | None *(updates force vector objects)* |
+| `add_force()` | Adds a force vector to the global loading array. | None *(modifies load data in-place)* |
+| `remove_force()` | Removes a force vector from the global loading array. | None *(modifies load data in-place)* |
+
+---
+
+#### Rendering & Coordinate Transformation
+
+| Function | Purpose | Returns |
+|----------|---------|---------|
+| `draw_mouse_vector()` | Renders the temporary force vector preview during drag operations. | None |
+| `update_vector_screen_position()` | Updates the screen-space positions of all force vectors after camera movement or zoom. | None |
+| `draw_force_vector()` | Draws a standardized force arrow. | None |
+| `render_fixed_vector()` | Renders all applied force vectors and their numerical magnitudes. | None |
+
+
+#### solver.py
+
+| Function | Inputs | Returns |
+|:---------|:-------|:--------|
+| `truss_matrix_elements()` | Node coordinates, cross-sectional area `A`, Young's modulus `E` | Local stiffness matrix, direction cosines (`c`, `s`), `A`, `E`, element length `L` |
+| `assemble_to_global()` | Global stiffness matrix, node indices, local stiffness matrix | Updates the global stiffness matrix in-place |
+| `connect()` | Node list, element connectivity, material properties, global stiffness matrix | Updates the global stiffness matrix and caches element properties |
+| `reduce()` | Global stiffness matrix, global load vector, free DOFs | Reduced stiffness matrix and reduced load vector |
+| `global_u()` | Reduced displacement vector, free DOFs, number of nodes | Complete global displacement vector |
+| `calculate_axial_force()` | Element identifiers, global displacement vector, cached element properties | Axial force and stress |
+| `solve_truss()` | Nodes, supports, element definitions, load vector | Global displacements, reaction forces, axial force list, stress list |
+
+-----------------
+
+The solver follows the classical linear finite element workflow shown below.
+
+| Stage | Function | Responsibility |
+|:------|:---------|:---------------|
+| **1. Local Element Formulation** | `truss_matrix_elements()` | Compute the local 4×4 element stiffness matrix, direction cosines, and geometric properties. |
+| **2. Global Assembly** | `assemble_to_global()` | Assemble a local element stiffness matrix into the global stiffness matrix. |
+|  | `connect()` | Generate the local stiffness matrix, assemble it into the global system, and cache element properties for post-processing. |
+| **3. Boundary Reduction** | `reduce()` | Apply boundary conditions by extracting the reduced stiffness matrix and load vector using the free DOFs. |
+| **4. Linear Solve** | `numpy.linalg.solve()` | Solve the reduced linear system \(K_r u_r = F_r\). |
+| **5. Displacement Reconstruction** | `global_u()` | Reconstruct the complete global displacement vector by inserting zero displacements at constrained DOFs. |
+| **6. Post-processing** | `calculate_axial_force()` | Compute element strain, stress, and axial force using the solved global displacement vector. |
+| **7. Solver Driver** | `solve_truss()` | Coordinate the entire solution pipeline and return all analysis results. |
+
+
+### visualization.py
+
+Handles coordinate transformations and structural visualization.
+
+---
+
+#### Coordinate Mapping
+
+| Function | Purpose | Returns |
+|:---------|:---------------|:--------|
+| `transform_coordinate()` | Convert world coordinates into screen coordinates using the current camera position and zoom level. | Screen-space `(x, y)` |
+| `convert_screen_to_world()` | Convert screen coordinates back into world coordinates. | World-space `(x, y)` |
+| `node_position_list()` | Transform every structural node into screen space and build a lookup table. | Dictionary of screen positions |
+| `snap_quarter()` | Snap a world coordinate to the nearest 0.25-unit grid interval. | Snapped coordinate (a value) |
+| `line_clip()` | Clip line segments against the visible viewport. | Clipped endpoints or `False` |
+
+---
+
+#### Heatmap & Color Processing
+
+| Function | Purpose | Returns |
+|:---------|:---------------|:--------|
+| `hsv_to_rgb()` | Convert HSV values into RGB values. | RGB tuple |
+| `bar_colour()` | Generate member colors based on structural state and failure information. | List of RGB colors |
+| `calculate_force_heatmap()` | Generate a force heatmap using red for tension and blue for compression. | List of RGB colors |
+
+---
+
+#### Rendering
+
+| Function | Purpose | Returns |
+|:---------|:---------------|:--------|
+| `draw_structure()` | Render nodes, members, supports, selections, and editor overlays onto the screen. | None |
+| `generate_grid_lines()` | Generate adaptive grid lines according to the current zoom level. | Grid line data |
+| `draw_grid()` | Render the generated background grid. | None |
+
+---
+
+#### Rendering task
+
+| Component | Purpose |
+|:----------|:---------------|
+| Coordinate Mapping | Convert between world and screen coordinate. |
+| Heatmaps | Visualize structural stress and force distributions. |
+| Grid System | Generate and render an adaptive engineering grid. |
+| Structure Rendering | Draw nodes, members, supports, and editor overlays. |
+
+
+### camera.py
+
+Manages the viewport's navigation, including panning, zooming, and camera state.
+
+---
+
+##### Core Data Structure
+
+#### `Camera` (class)
+Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and interaction states used for camera movement.
+
+---
+
+#### Camera Controls
+
+| Method | Responsibility | Returns |
+|:-------|:---------------|:--------|
+| `handle_clicking()` | Start or stop viewport dragging and cache the initial mouse position. | None |
+| `update_camera()` | Update the camera position during click-and-drag panning and ensure constraints of the camera's position. | None |
+| `update_zoom()` | Adjust the zoom level while keeping the world position under the cursor fixed on the screen. | None |
 
 
 -----
