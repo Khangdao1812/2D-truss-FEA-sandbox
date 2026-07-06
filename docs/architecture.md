@@ -67,7 +67,7 @@ External loads represent forces applied to the structure. They are assembled int
 The simulation maintains a small set of state variables that determine the current behavior of the application.
 
 #### Collapse State
-Indicates whether the structure has experienced progressive collapse. When active, the simulation enters a freeze state, allowing the user to inspect the failed configuration before continuing without the failed member.
+Indicates whether the structure has experienced progressive collapse. When active, the simulation enters a freeze state, allowing the user to inspect the failed structure before continuing without the failed member.
 
 #### Inspection Mode
 Provide detailed  structural results, including member force history and other analysis data for every member.
@@ -93,8 +93,6 @@ The camera is the lens at which users see the world. Available actions are panni
 
 
 ### 5.1 User Interface
-
- ### 5.1 User Interface
 
 **Responsibility**
 
@@ -225,7 +223,7 @@ The difference between structure.structure and structure.now_truss will be expla
 ## 7. Core Functions
   For convinience, I'd like to organize this section by each individual code files.
 
-### main.py 
+### 1. main.py 
 
 The application's central controller. It owns the main loop, coordinates communication between subsystems, and manages the transition between editor and simulation modes.
 
@@ -282,9 +280,11 @@ Stores the complete state of the current truss model and application.
 | `run_program()` | Initializes the application and executes the main program loop. | None |
 
 
-### editor.py
 
-The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and mouse-driven interactions within the editor.
+
+### 2. editor.py
+
+  The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and mouse-driven interactions within the editor.
 
 ---
 
@@ -338,7 +338,8 @@ Visual display of an external force applied to a node, storing both its physical
 | `render_fixed_vector()` | Renders all applied force vectors and their numerical magnitudes. | None |
 
 
-#### solver.py
+
+### 3. solver.py
 
 | Function | Inputs | Returns |
 |:---------|:-------|:--------|
@@ -366,7 +367,9 @@ The solver follows the classical linear finite element workflow shown below.
 | **7. Solver Driver** | `solve_truss()` | Coordinate the entire solution pipeline and return all analysis results. |
 
 
-### visualization.py
+
+
+### 4. visualization.py
 
 Handles coordinate transformations and structural visualization.
 
@@ -414,7 +417,8 @@ Handles coordinate transformations and structural visualization.
 | Structure Rendering | Draw nodes, members, supports, and editor overlays. |
 
 
-### camera.py
+
+### 5. camera.py
 
 Manages the viewport's navigation, including panning, zooming, and camera state.
 
@@ -437,7 +441,7 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 
 -----
-## 7. Execution Flow
+## 8. Proram cycle
 
 ### Program startup
 
@@ -451,50 +455,43 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 ---
 
-## 8. Communication Between Modules
-
-Who calls whom?
-
-Dependency direction
-
-Data flow
-
----
 
 ## 9. Typical Workflows
 
-Creating a bridge
+1. Creating a bridge
 
-Moving a node
+2. Applying a load
 
-Applying a load
+3. Running the simulation
 
-Running the simulation
+4. Inspecting a member
 
-Inspecting a member
-
-Progressive collapse
+5. Progressive collapse
 
 ---
 
 ## 10. Extension Points
 
-Adding new UI tools
-
-Adding new element types
-
-Replacing the renderer
-
-Changing the solver
-
-Adding new visualization
+| I want to... (goal) | Primary Modules |
+|:------|:----------------|
+| Add a new UI tool | `editor.py`, `main.py` |
+| Add a new visualization for buckling| `visualization.py`, `main.py` |
+| Replace the renderer | `visualization.py` |
+| Add a new failure criterion | `main.py` |
+| Add a new structural element | `solver.py`, `visualization.py`, `editor.py` |
+| Replace the linear solver | `solver.py` |
+| Add simulation controls | `main.py` |
 
 ---
 
-## 11. Architectural Constraints
+## 11. Suggested improvements in code architecture
 
-Current assumptions
+The current architecture prioritizes feature development over ideal software organization. The following areas are recognised for future refactoring : 
 
-Known limitations
+- The `Structure` dataclass currently stores several runtime variables (`timer`, `elapsed_time`, `pause_after_failure`, `time_history`, `selected_bar`, etc.) that are unrelated to the structural model. Simulation state, UI state, and structural data should eventually be separated into dedicated classes.
 
-Future scalability
+- Structural nodes and members are represented as tuples gathered in a list rather than `Node` and `Element` objects. This leads to frequent index arithmetic, reduces readability, and makes future extensions more difficult.
+
+- Switching between editor and simulation modes requires manually resetting numerous variables, clearing multiple lists, and copying structural data. A cleaner design would replace or reinitialize the entire `Structure` object in the main program loop, significantly simplifying state management.
+
+- Heavy reliance on state variables like : moving_vector (turns on when in the load editor) , inspection_mode, creating bars (turns on when in the structure editor), etc. There are many variables that are dependent on these states and require manual reset each time the main states turn on or off.
