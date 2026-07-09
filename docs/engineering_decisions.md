@@ -72,7 +72,7 @@ The program provides two visualization modes: a load ratio heatmap indicating st
 
 ---
 ## Math & other
-
+---
 ### Why calculate the precise failure load instead of using fixed load increments?
 Instead of increasing the applied load by fixed increments, the simulation computes the exact load scale at which the next structural member fails.
 
