@@ -2,14 +2,13 @@
 
 
 ## 1. Purpose
-   This is probably the longest document that I'd attached to this project. It presents the overall structure & design of this program for developers who are interested in. By the time you finish reading, you can hopefully get the hang of the entire code & begin adding additional features, upgrades or optimization.
+   This document aims to give readers an overview of this program's code architecture and organization. It is intended for developers interested in understanding the code base, extending features or making optimizations.
    
 ### Goals of this document
 
 This document is intended to help readers:
 
-- Understand the overall architecture of the project.
-- Build a mental model of how the major subsystems work toghether.
+- Understand the overall architecture & code organization of the project.
 - Guide yourself through the codebase more efficiently.
 - Trace the flow of data through the application.
   
@@ -19,18 +18,15 @@ This document is intended to help readers:
 
 ### Diagram
 
-<img width="442" height="652" alt="Screenshot 2026-07-06 160741" src="https://github.com/user-attachments/assets/c8adf4b7-775e-49c3-a6e5-f3d18d538e3c" />
+<img width="462" height="641" alt="Screenshot 2026-07-06 160741" src="https://github.com/user-attachments/assets/238394d2-0f96-40c5-95bc-26f1ec54f642" />
 
-A general summary of run-time cycle
+Overview of the program's run-time cycle
 
 ### Main subsystems
 A brief overview of the major subsystems within this project.
 
 #### User Interface
 Handles user interaction, editing operations, and simulation controls.
-
-#### Simulation Controller
-Coordinates the application's execution, manages simulation state.
 
 #### Solver
 Computes structural displacements, member forces, and stresses from the current model.
@@ -52,7 +48,7 @@ Visualizes the structure, simulation results, and user interface from the evalua
 #### Nodes
 Nodes represent the joints of the truss. They define the geometry of the structure and are the locations where supports and external loads can be applied.
 
-#### Elements/member/bar
+#### Elements (other names like member, bar are also used interchangibly in the code & documents)
 Elements connect pairs of nodes and model individual truss members. Each element contributes to the global stiffness matrix and carries axial force only.
 
 #### Supports
@@ -68,7 +64,7 @@ External loads represent forces applied to the structure. They are assembled int
 The simulation maintains a small set of state variables that determine the current behavior of the application.
 
 #### Collapse State
-Indicates whether the structure has experienced progressive collapse. When active, the simulation enters a freeze state, allowing the user to inspect the failed structure before continuing without the failed member.
+Shows whether the structure has experienced progressive collapse. When active, the simulation enters a freeze state, allowing the user to inspect the failed structure before continuing without the failed member.
 
 #### Inspection Mode
 Provide detailed  structural results, including member force history and other analysis data for every member.
@@ -188,7 +184,7 @@ Reference table for major variables.
 | `Structure` | Nodal Displacements | Derived | FEM Solver | Evaluation Engine, Renderer |
 | `Structure` | Member Forces | Derived | FEM Solver | Evaluation Engine, Renderer |
 | `Structure` | Member Stresses | Derived | FEM Solver | Evaluation Engine, Renderer |
-| `Structure` | Colour code | Derived | FEM Solver | Evaluation Engine, Renderer |
+| `Structure` | Member colours | Derived | FEM Solver | Evaluation Engine, Renderer |
 | `Structure` | Failed Members | Derived | Evaluation Engine | Renderer |
 | `Camera` | Camera position | Mutable | User Interface | Renderer |
 | `Camera` | Zoom | Mutable | User Interface | Renderer |
@@ -216,8 +212,6 @@ Reference table for major variables.
   - structure.force
 
   After the initial startup of the program, the variables nodes_external, connections, free_nodes_external, F_raw will no longer play any role in the program.
-
-The difference between structure.structure and structure.now_truss will be explained later in this document. ######## Jump to the line X if you wish to see it right now.
 
 ---
 
@@ -251,12 +245,12 @@ Stores the complete state of the current truss model and application.
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `run_critical_buckling_stress()` | Computes the Euler critical buckling load for every member. | List of critical buckling loads |
-| `estimate_force_scale()` | Predicts the maximum load scale before the first member fails. | Force scale, heat map, axial forces, stresses |
+| `run_critical_buckling_stress()` | Calculates the Euler critical buckling load for every member. | List of critical buckling loads for each bar (index-mapped) |
+| `estimate_force_scale()` | Estimates the maximum load scale before the first member fails. | Force scale, heat map, axial forces, stresses |
 | `find_failure()` | Detects the first member exceeding its failure criterion. | Failed member index or `None` |
-| `compute_scale()` | Computes the deformed geometry from nodal displacements. | Deformed node positions, maximum displacement ratio |
+| `compute_scale()` | Computes the node positions in world coordinates from nodal displacements. | Deformed node positions, maximum displacement ratio |
 | `remove_failed_member()` | Removes a failed member and updates the structural model. | None *(in-place modification)* |
-| `run_simulation_loop()` | Advances the simulation by one fixed timestep. | None *(updates the simulation state)* |
+| `run_simulation_loop()` | Continues the simulation by a preset timestep. | None *(updates the simulation state)* |
 
 ---
 
@@ -264,9 +258,9 @@ Stores the complete state of the current truss model and application.
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `point_segment_distance()` | Computes the shortest distance between the cursor and a bar. | Distance |
-| `pick_bar()` | Determines which member is currently selected. | Selected member or `None` |
-| `handle_events()` | Processes keyboard and mouse input. | Updated application mode |
+| `point_segment_distance()` | Calculates the shortest distance between the cursor and a bar. | Distance |
+| `pick_bar()` | Determines the currently selected member. | Selected member or `None` |
+| `handle_events()` | Receives user's input from mousse & keyboard. | Updated mode |
 
 ---
 
@@ -274,18 +268,18 @@ Stores the complete state of the current truss model and application.
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `draw_graph()` | Draws the stress history graph for the selected member. | None |
+| `draw_graph()` | Draws the stress-time graph for the selected member. | None |
 | `draw_bar_popup()` | Displays detailed information about the selected member. | None |
 | `display_editor()` | Renders the editor workspace. | None |
 | `render_simulation()` | Renders the simulation scene. | None |
-| `run_program()` | Initializes the application and executes the main program loop. | None |
+| `run_program()` | Main program loop. | None |
 
 
 
 
 ### 7.2. editor.py
 
-  The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and mouse-driven interactions within the editor.
+  The user interaction module responsible for constructing and editing truss models. It manages node and member creation, external force editing, coordinate transformations, and interactions within the editor.
 
 ---
 
@@ -305,7 +299,7 @@ Visual display of an external force applied to a node, storing both its physical
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `pick_closest_node()` | Finds the node closest to the cursor within the threshold. | Selected node index or `None` |
+| `pick_closest_node()` | Finds the node closest to the cursor within the detecting range. | Selected node index or `None` |
 | `find_selected_bar()` | Determines which structural member is currently under/close the cursor. | Selected member index or `None` |
 
 ---
@@ -314,8 +308,8 @@ Visual display of an external force applied to a node, storing both its physical
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `detect_key_edit_structure()` | Processes editor input for creating, modifying, and deleting structural components. | None *(updates the structural model)* |
-| `detect_key_force_editor()` | Handles mouse interactions for creating and modifying external force vectors. | None *(updates editor state)* |
+| `detect_key_edit_structure()` | Handles editor input for creating, modifying, and deleting structural components. | None *(updates the structural model)* |
+| `detect_key_force_editor()` | Handles mouse interactions for creating and modifying force vectors (applied load). | None *(updates editor state)* |
 
 ---
 
@@ -323,9 +317,9 @@ Visual display of an external force applied to a node, storing both its physical
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `interpret_force_array()` | Creates `ForceVector` objects from the current global load vector. | None *(updates force vector objects)* |
-| `add_force()` | Adds a force vector to the global loading array. | None *(modifies load data in-place)* |
-| `remove_force()` | Removes a force vector from the global loading array. | None *(modifies load data in-place)* |
+| `interpret_force_array()` | Creates `ForceVector` objects from the current load input (when the program starts). | None *(updates force vector objects)* |
+| `add_force()` | Adds a force vector to the list of force vectors applied on the structure. | None *(modifies load data in-place)* |
+| `remove_force()` | Removes a force vector from the list of applied force loads. | None *(modifies load data in-place)* |
 
 ---
 
@@ -333,7 +327,7 @@ Visual display of an external force applied to a node, storing both its physical
 
 | Function | Purpose | Returns |
 |----------|---------|---------|
-| `draw_mouse_vector()` | Renders the temporary force vector preview during drag operations. | None |
+| `draw_mouse_vector()` | Renders the preview force vector when creating force vectors. | None |
 | `update_vector_screen_position()` | Updates the screen-space positions of all force vectors after camera movement or zoom. | None |
 | `draw_force_vector()` | Draws a standardized force arrow. | None |
 | `render_fixed_vector()` | Renders all applied force vectors and their numerical magnitudes. | None |
@@ -346,10 +340,10 @@ Visual display of an external force applied to a node, storing both its physical
 |:---------|:-------|:--------|
 | `truss_matrix_elements()` | Node coordinates, cross-sectional area `A`, Young's modulus `E` | Local stiffness matrix, direction cosines (`c`, `s`), `A`, `E`, element length `L` |
 | `assemble_to_global()` | Global stiffness matrix, node indices, local stiffness matrix | Updates the global stiffness matrix in-place |
-| `connect()` | Node list, element connectivity, material properties, global stiffness matrix | Updates the global stiffness matrix and caches element properties |
+| `connect()` | Node list, element connectivity, material properties, global stiffness matrix | Updates the global stiffness matrix and element properties |
 | `reduce()` | Global stiffness matrix, global load vector, free DOFs | Reduced stiffness matrix and reduced load vector |
 | `global_u()` | Reduced displacement vector, free DOFs, number of nodes | Complete global displacement vector |
-| `calculate_axial_force()` | Element identifiers, global displacement vector, cached element properties | Axial force and stress |
+| `calculate_axial_force()` | Element identifiers, global displacement vector, element properties | Axial force and stress |
 | `solve_truss()` | Nodes, supports, element definitions, load vector | Global displacements, reaction forces, axial force list, stress list |
 
 -----------------
@@ -360,7 +354,7 @@ The solver follows the classical linear finite element workflow shown below.
 |:------|:---------|:---------------|
 | **1. Local Element Formulation** | `truss_matrix_elements()` | Compute the local 4×4 element stiffness matrix, direction cosines, and geometric properties. |
 | **2. Global Assembly** | `assemble_to_global()` | Assemble a local element stiffness matrix into the global stiffness matrix. |
-|  | `connect()` | Generate the local stiffness matrix, assemble it into the global system, and cache element properties for post-processing. |
+|  | `connect()` | Generate the local stiffness matrix, assemble it into the global system, and element properties for post-processing. |
 | **3. Boundary Reduction** | `reduce()` | Apply boundary conditions by extracting the reduced stiffness matrix and load vector using the free DOFs. |
 | **4. Linear Solve** | `numpy.linalg.solve()` | Solve the reduced linear system \(K_r u_r = F_r\). |
 | **5. Displacement Reconstruction** | `global_u()` | Reconstruct the complete global displacement vector by inserting zero displacements at constrained DOFs. |
@@ -403,8 +397,8 @@ Handles coordinate transformations and structural visualization.
 | Function | Purpose | Returns |
 |:---------|:---------------|:--------|
 | `draw_structure()` | Render nodes, members, supports, selections, and editor overlays onto the screen. | None |
-| `generate_grid_lines()` | Generate adaptive grid lines according to the current zoom level. | Grid line data |
-| `draw_grid()` | Render the generated background grid. | None |
+| `generate_grid_lines()` | Generate grid lines according to the current zoom level & world coordinate. | Grid line data |
+| `draw_grid()` | Render the background grid. | None |
 
 ---
 
@@ -414,7 +408,7 @@ Handles coordinate transformations and structural visualization.
 |:----------|:---------------|
 | Coordinate Mapping | Convert between world and screen coordinate. |
 | Heatmaps | Visualize structural stress and force distributions. |
-| Grid System | Generate and render an adaptive engineering grid. |
+| Grid System | Generate and render grid that helps more precise design drawings. |
 | Structure Rendering | Draw nodes, members, supports, and editor overlays. |
 
 
@@ -436,29 +430,14 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 | Method | Responsibility | Returns |
 |:-------|:---------------|:--------|
-| `handle_clicking()` | Start or stop viewport dragging and cache the initial mouse position. | None |
-| `update_camera()` | Update the camera position during click-and-drag panning and ensure constraints of the camera's position. | None |
+| `handle_clicking()` | Start or stop viewport dragging and get the initial mouse position. | None |
+| `update_camera()` | Update the camera position during panning and ensure constraints of the camera's position. | None |
 | `update_zoom()` | Adjust the zoom level while keeping the world position under the cursor fixed on the screen. | None |
 
 
 ---
 
-
-## 8. Typical Workflows
-
-1. Creating a truss structure (crane boom, bridge, roof, frame)
-
-2. Applying a load
-
-3. Running the simulation
-
-4. Inspecting a member
-
-5. Progressive collapse
-
----
-
-## 9. Extension Points
+## 8. Extension Points
 
 | I want to... (goal) | Primary Modules |
 |:------|:----------------|
@@ -472,7 +451,7 @@ Stores viewport translation (`camx`, `camy`), zoom level, scaling limits, and in
 
 ---
 
-## 10. Suggested improvements in code architecture
+## 9. Suggested improvements in code architecture
 
 The current architecture prioritizes feature development over ideal software organization. The following areas are recognised for future refactoring : 
 
