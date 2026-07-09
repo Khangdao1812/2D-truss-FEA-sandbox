@@ -357,9 +357,9 @@ The solver follows the classical linear finite element workflow shown below.
 |  | `connect()` | Generate the local stiffness matrix, assemble it into the global system, and element properties for post-processing. |
 | **3. Boundary Reduction** | `reduce()` | Apply boundary conditions by extracting the reduced stiffness matrix and load vector using the free DOFs. |
 | **4. Linear Solve** | `numpy.linalg.solve()` | Solve the reduced linear system \(K_r u_r = F_r\). |
-| **5. Displacement Reconstruction** | `global_u()` | Reconstruct the complete global displacement vector by inserting zero displacements at constrained DOFs. |
+| **5. Displacement Reconstruction** | `global_u()` | Reconstruct the complete global displacement vector by inserting zero displacements at fixed nodes. |
 | **6. Post-processing** | `calculate_axial_force()` | Compute element strain, stress, and axial force using the solved global displacement vector. |
-| **7. Solver Driver** | `solve_truss()` | Coordinate the entire solution pipeline and return all analysis results. |
+| **7. Solver Driver** | `solve_truss()` | Run the entire solution pipeline and return all analysis results. |
 
 
 
