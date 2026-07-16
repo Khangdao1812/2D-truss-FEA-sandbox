@@ -26,7 +26,7 @@ In this project, however, the rendering system redefines the origin to the **cen
 
 ---
 
-## Camera Transform (camera object)
+## Camera Transform (`camera object`)
   After converting world coordinates into screen coordinates, camera transformations are applied before rendering objects onto the screen.
 
 The camera supports two actions :
@@ -38,14 +38,14 @@ Separating camera transformations from world coordinates allows the structural m
 
 ---
 
-## Adaptive Grid (optional, can be turned on/off) (generate_grid())
+## Adaptive Grid (optional, can be turned on/off) (`generate_grid(..)`)
   Adaptive grids help users to create nodes more easily, since node creation is limited to only the 1/4 lattice. Their generation begins with determining the quarter-lattice point furthest to the top-left of the screen and transform its position to screen coordinates.
   
   Another calculation determines the number of pixels on screen equivalent to one-quarter of a world unit. Then, the program proceeds to render equally spaced horizontal and vertical lines until they extend beyond the visible screen.
 
 ---
 
-## Stress heatmap (bar_colour())
+## Stress heatmap (`bar_colour(...)`)
 
    The stress heatmap visualizes the internal force distribution of each element in respect to their calculated failure thresholds. To do this, the function responsible for generating stress heatmap (`bar_colour()`) takes the utilization ratio (`stress/threshold`)for colour-mapping. 
    
@@ -55,14 +55,14 @@ Separating camera transformations from world coordinates allows the structural m
 
 ---
 
-## Clipping (line_clip)
+## Clipping (`line_clip(...)`)
 
 Before rendering each structural member, the program performs line clipping to determine the intersection between a straight member and the viewing port's edges.
 
 Members located entirely outside the screen are ignored, while partially visible members are clipped to the viewport boundaries. The reason for this is to optimize the number of operations and avoid rendering artifacts that previously plagued the rendering system for weeks. 
 
 ---
-## Drawing (draw_structure())
+## Drawing (`draw_structure(...)`)
   Repeatedly applying pygame commands like pg.draw_circle and pg.draw_line to render nodes & members.
 
 ---
