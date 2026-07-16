@@ -7,7 +7,9 @@
 
 
 <img width="472" height="596" alt="image" src="https://github.com/user-attachments/assets/726794eb-60d0-4e05-b8ce-ddfef7835198" />
- An overview of the rendering pipeline
+
+
+ **An overview of the rendering pipeline**
  
 ---
 
@@ -38,14 +40,17 @@ Separating camera transformations from world coordinates allows the structural m
 
 ## Adaptive Grid (optional, can be turned on/off)
   Adaptive grids help users to create nodes more easily, since node creation is limited to only the 1/4 lattice. Their generation begins with determining the quarter-lattice point furthest to the top-left of the screen and transform its position to screen coordinates.
+  
   Another calculation determines the number of pixels on screen equivalent to one-quarter of a world unit. Then, the program proceeds to render equally spaced horizontal and vertical lines until they extend beyond the visible screen.
 
 ---
 
 ## Stress heatmap
 
-   The stress heatmap visualizes the internal force distribution of each element in respect to their calculated failure thresholds. To do this, the function responsible for generating stress heatmap ('bar_colour') takes 'stress/threshold' as a representative quantity for colour-mapping. 
+   The stress heatmap visualizes the internal force distribution of each element in respect to their calculated failure thresholds. To do this, the function responsible for generating stress heatmap (`bar_colour()`) takes the utilization ratio (`stress/threshold`)for colour-mapping. 
+   
    Similarly, force distribution heatmap uses the same mechanism, however, the threshold is now replaced with the maximum/minimum load of an individual member in the entire structure. 
+   
   The list of these quantities for all members is then normalized into the range \([0,1]\) before being mapped to an HSV color gradient and converted into RGB values for rendering. This ensures that the entire colour spectrum is utilized for smooth transition between the safe and failure criterion, while also making relative stress differences easier to intepret. 
 
 ---
