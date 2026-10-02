@@ -23,7 +23,6 @@ Progressive failure frame-freeze : Every time the user hits the enter button, th
   Around a year ago, I borrowed an old book of my grandparents about classical mechanics in engineering (they're both civil engineers) and was particularly intrigued with the content and the exercise. Prior to this, I've also explored some engineering softwares like CAD and SolidWorks out of curiosity. However, the experience was not so smooth since their interface is not so straightforward to a my 14-year-old self (I also don't see the reason why they should optimize it for a 14-year-old!).
    One day, these two thoughts, combined with my pursuit in linear algebra at the time, came toghether unexpectedly after wandering for a long time at the corners of my mind. This is the reason why I set out to program THIS engineering sandbox on my own, with the aim to both learn & make structural analysis more accessible to young engineering enthusiasts
 
-→ Read more: [docs/Reflection.md](https://github.com/Khangdao1812/2D-truss-FEA-sandbox/blob/main/docs/reflection.md)
 
 ----------------------------------------
 
