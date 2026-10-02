@@ -1,7 +1,7 @@
 # Engineering Decisions
 
 ## Purpose
- This document is a collection of decisions related to the technical aspect of this project throughout the long journey. 
+ This document is a collection of decisions related to the technicalities throughout the long journey of creating this project. 
 
 ## Solver design
 
@@ -23,12 +23,11 @@ The program only supports the analysis of planar truss structures, assuming smal
 NumPy is used for all matrix assembly and linear algebra operations.
 
 **Reason** : 
-- Keeps the implementation focused on ideas & modeling in structural engineering rather than numerical optimization
-- Makes the code more readable to general developers (especially when numpy is a well-known library)
+- Keeps the implementation focused on ideas & modeling in structural engineering rather than optimizing computation
+- Makes the code more readable to developers (especially when numpy is a well-known library)
 
 **Trade-offs** : 
 - Dependency on code library
-- Does not illustrate understanding of linear algebra down to the deepest levels
 
 ---
 ### Why dictionary-based element look up?
@@ -49,8 +48,7 @@ Object-oriented programming is used selectively in some areas of the project. Fo
 
 **Reason** : 
 - Keeps related data and behaviors together, improving code organization and readability.
-- Simplifies communication between different parts of the program.
-- Avoids long and confusing code when working solely with lists, tuples and indices.
+- Avoids long and confusing code when working with index arithmetic.
 
 **Trade-offs**
 - Some runtime variables (such as playback_speed, time, etc) is currently concentrated within the `Structure` class, increasing coupling.
@@ -68,7 +66,6 @@ The program provides two visualization modes: a load ratio heatmap indicating st
 
 **Trade-offs** : 
 - Requires maintaining two independent color-mapping strategies.
-- Users must understand the difference between stress and utilization to interpret the results correctly.
 
 ---
 ## Math & other
@@ -78,25 +75,23 @@ Instead of increasing the applied load by fixed increments, the simulation compu
 
 **Reason** : 
 - Prevents missing the exact failure point due to crude load increments.
-- Obviates the need to balance accuracy against simulation speed through manual adjustments.
-- Ensures consistent and deterministic progressive failure behavior regardless of the structure geometry and chosen playback speed.
-
+- Removes the need to balance accuracy against simulation speed through manual adjustments.
+- Ensures consistent speed and accuracy regardless of the different geometries.
+  
 **Trade-offs** : 
-- Requires additional calculations before each failure event.
 - Slightly increases implementation complexity
-- Only applicable under the assumption of small deformation in the material's elastic region.
+- Limit : Only applicable when working with linear elastic assumption, meaning all deformations can be recovered when forces are removed.
 
 ---
 ### Why discrete time step?
-The simulation advances through discrete time steps rather than using advanced continuous time integration.
+The simulation advances through discrete time steps rather than using a continuous time flow (which would require integrands).
 
 **Reason** : 
 - Matches the event-driven nature of the progressive failure mechanism in the program.
 - Simplifies animation playback and time-history recording.
-- Allows each analysis step to reach equilibrium before advancing to the next event.
 
 **Trade-offs** : 
-- Does not capture continuous structural dynamics or inertial effects.
+- Does not capture continuous structural behaviour.
 - Motion between states is approximated through discrete updates.
 
 ---
